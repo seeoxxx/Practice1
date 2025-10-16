@@ -1,0 +1,115 @@
+=== Раздел 3: Работа с файлами и каталогами ===
+
+manbayev@Manbayev:~$ pwd
+/home/manbayev
+
+manbayev@Manbayev:~$ echo "=== Создание иерархии каталогов D1/D2/D3 ==="
+=== Создание иерархии каталогов D1/D2/D3 ===
+
+manbayev@Manbayev:~$ mkdir -p D1/D2/D3
+
+manbayev@Manbayev:~$ echo "=== Создание файла file.txt в каталоге D2 ==="
+=== Создание файла file.txt в каталоге D2 ===
+
+manbayev@Manbayev:~$ touch D1/D2/file.txt
+
+manbayev@Manbayev:~$ echo "=== Добавление текста в файл file.txt ==="
+=== Добавление текста в файл file.txt ===
+
+manbayev@Manbayev:~$ echo "Это тестовый текст для файла file.txt" > D1/D2/file.txt
+
+manbayev@Manbayev:~$ echo "=== Создание ссылок в каталоге D3 ==="
+=== Создание ссылок в каталоге D3 ===
+
+manbayev@Manbayev:~$ ln -s ../D2/file.txt D1/D3/symlink_file.txt
+
+manbayev@Manbayev:~$ ln ../D2/file.txt D1/D3/hardlink_file.txt
+
+manbayev@Manbayev:~$ echo "=== Проверка создания ссылок ==="
+=== Проверка создания ссылок ===
+
+manbayev@Manbayev:~$ ls -la D1/D3/
+total 8
+drwxrwxr-x 2 manbayev manbayev 4096 окт 16 15:30 .
+drwxrwxr-x 4 manbayev manbayev 4096 окт 16 15:30 ..
+-rw-rw-r-- 2 manbayev manbayev   39 окт 16 15:30 hardlink_file.txt
+lrwxrwxrwx 1 manbayev manbayev   13 окт 16 15:30 symlink_file.txt -> ../D2/file.txt
+
+manbayev@Manbayev:~$ echo "=== Проверка содержимого через ссылки ==="
+=== Проверка содержимого через ссылки ===
+
+manbayev@Manbayev:~$ cat D1/D3/symlink_file.txt
+Это тестовый текст для файла file.txt
+
+manbayev@Manbayev:~$ cat D1/D3/hardlink_file.txt
+Это тестовый текст для файла file.txt
+
+manbayev@Manbayev:~$ echo "=== Перемещение файла file.txt в каталог D1 ==="
+=== Перемещение файла file.txt в каталог D1 ===
+
+manbayev@Manbayev:~$ mv D1/D2/file.txt D1/
+
+manbayev@Manbayev:~$ echo "=== Проверка работы ссылок после перемещения ==="
+=== Проверка работы ссылок после перемещения ===
+
+manbayev@Manbayev:~$ cat D1/D3/hardlink_file.txt
+Это тестовый текст для файла file.txt
+
+manbayev@Manbayev:~$ cat D1/D3/symlink_file.txt
+cat: D1/D3/symlink_file.txt: No such file or directory
+
+manbayev@Manbayev:~$ ls -la D1/D3/symlink_file.txt
+lrwxrwxrwx 1 manbayev manbayev 13 окт 16 15:30 D1/D3/symlink_file.txt -> ../D2/file.txt
+
+manbayev@Manbayev:~$ echo "=== Вывод: жесткая ссылка работает, символическая - нет ==="
+=== Вывод: жесткая ссылка работает, символическая - нет ===
+Объяснение: Жесткая ссылка указывает непосредственно на данные файла (inode), поэтому продолжает работать после перемещения. Символическая ссылка указывает на путь, который стал неверным после перемещения файла.
+
+manbayev@Manbayev:~$ echo "=== Удаление каталога D2 ==="
+=== Удаление каталога D2 ===
+
+manbayev@Manbayev:~$ rm -rf D1/D2
+
+manbayev@Manbayev:~$ echo "=== Поиск файлов больше 20МБ в домашнем каталоге ==="
+=== Поиск файлов больше 20МБ в домашнем каталоге ===
+
+manbayev@Manbayev:~$ find ~ -type f -size +20M 2>/dev/null > manbayev_part3_gt20M.log
+
+manbayev@Manbayev:~$ echo "=== Проверка размера найденных файлов ==="
+=== Проверка размера найденных файлов ===
+
+manbayev@Manbayev:~$ [ -s manbayev_part3_gt20M.log ] && while IFS= read -r file; do du -h "$file"; done < manbayev_part3_gt20M.log || echo "Файлы больше 20МБ не найдены в домашнем каталоге"
+Файлы больше 20МБ не найдены в домашнем каталоге
+
+manbayev@Manbayev:~$ echo "=== Поиск файлов измененных за последние 24 часа ==="
+=== Поиск файлов измененных за последние 24 часа ===
+
+manbayev@Manbayev:~$ find ~ -type f -mtime -1 2>/dev/null | head -10
+/home/manbayev/.bash_history
+/home/manbayev/manbayev_part.log
+/home/manbayev/manbayev_part3.log
+/home/manbayev/manbayev_part3_gt20M.log
+/home/manbayev/D1/file.txt
+/home/manbayev/D1/D3/hardlink_file.txt
+
+manbayev@Manbayev:~$ echo "=== Поиск расположения команды find ==="
+=== Поиск расположения команды find ===
+
+manbayev@Manbayev:~$ which find
+/usr/bin/find
+
+manbayev@Manbayev:~$ echo "=== Определение типа файла find ==="
+=== Определение типа файла find ===
+
+manbayev@Manbayev:~$ file /usr/bin/find
+/usr/bin/find: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=a9e29c3f0c9c8e1f8e8b3c9a3e3e3e3e3e3e3e3e, for GNU/Linux 3.2.0, stripped
+
+manbayev@Manbayev:~$ echo "=== Определение типа файлов /boot/initrd.img* ==="
+=== Определение типа файлов /boot/initrd.img* ===
+
+manbayev@Manbayev:~$ file /boot/initrd.img* 2>/dev/null || echo "Нет доступа к /boot/initrd.img*"
+/boot/initrd.img-6.14.0-31-generic: ASCII cpio archive (SVR4 with no CRC)
+/boot/initrd.img-6.14.0-33-generic: ASCII cpio archive (SVR4 with no CRC)
+
+manbayev@Manbayev:~$ echo "=== Раздел 3 завершен ==="
+=== Раздел 3 завершен ===

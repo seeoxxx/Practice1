@@ -1,0 +1,134 @@
+whoami_part2$ echo "=== Начало сессии whoami_part2 ==="
+=== Начало сессии whoami_part2 ===
+whoami_part2$ echo "=== Команды, начинающиеся на 'ls' ==="
+=== Команды, начинающиеся на 'ls' ===
+whoami_part2$ compgen -c | grep '^ls'
+lsmod
+lspcmcia
+lsusb
+lspower
+lsmem
+lshw
+lsipc
+lsns
+lsof
+lsblk
+ls
+lspci
+lsb_release
+lscpu
+lslocks
+lspgpot
+lslogins
+lsinitramfs
+lsattr
+whoami_part2$ echo "=== Переменные, начинающиеся с 'HIST' ==="
+=== Переменные, начинающиеся с 'HIST' ===
+whoami_part2$ compgen -v | grep '^HIST'
+HISTCMD
+HISTFILE
+HISTFILESIZE
+HISTSIZE
+whoami_part2$ echo "=== Размер истории команд ==="
+=== Размер истории команд ===
+whoami_part2$ echo "HISTSIZE: $HISTSIZE"
+HISTSIZE: 500
+whoami_part2$ echo "HISTFILESIZE: $HISTFILESIZE"
+HISTFILESIZE: 500
+whoami_part2$ echo "=== Скрытые файлы и каталоги ==="
+=== Скрытые файлы и каталоги ===
+whoami_part2$ ls -d ~/.* | grep -v '/\.\.$'
+/home/manbayev/.bash_history
+/home/manbayev/.bash_logout
+/home/manbayev/.bashrc
+/home/manbayev/.cache
+/home/manbayev/.config
+/home/manbayev/.gnupg
+/home/manbayev/.local
+/home/manbayev/.log
+/home/manbayev/.profile
+/home/manbayev/.putty
+/home/manbayev/.ssh
+/home/manbayev/.sudo_as_admin_successful
+/home/manbayev/.themes
+whoami_part2$ echo "=== Настройка формата истории с датами ==="
+=== Настройка формата истории с датами ===
+whoami_part2$ export HISTTIMEFORMAT="%d.%m.%Y %H:%M:%S "
+whoami_part2$ echo "HISTTIMEFORMAT установлен в: $HISTTIMEFORMAT"
+HISTTIMEFORMAT установлен в: %d.%m.%Y %H:%M:%S 
+whoami_part2$ echo "=== Ввод команды date ==="
+=== Ввод команды date ===
+whoami_part2$ date
+Чт 16 окт 2025 15:24:28 +07
+whoami_part2$ echo "=== Проверка кэша истории ==="
+=== Проверка кэша истории ===
+whoami_part2$ history | tail -3
+  246  16.10.2025 15:24:28 date
+  247  16.10.2025 15:24:33 echo "=== Проверка кэша истории ==="
+  248  16.10.2025 15:24:33 history | tail -3
+whoami_part2$ echo "=== Проверка файла истории ==="
+=== Проверка файла истории ===
+whoami_part2$ tail -3 ~/.bash_history
+clear
+bash --rcfile <(echo 'PS1="whoami_part2$ "; export TERM=dumb')
+exec > >(sed -u "s/\x1B\[[0-9;]*[a-zA-Z]//g" | tee -a manbayev_part.log) 2>&1
+whoami_part2$ echo "=== Установка PROMPT_COMMAND ==="
+=== Установка PROMPT_COMMAND ===
+whoami_part2$ export PROMPT_COMMAND='history -a'
+whoami_part2$ echo "PROMPT_COMMAND установлен в: $PROMPT_COMMAND"
+PROMPT_COMMAND установлен в: history -a
+whoami_part2$ echo "=== Ввод команды pwd для проверки ==="
+=== Ввод команды pwd для проверки ===
+whoami_part2$ pwd
+/home/manbayev
+whoami_part2$ echo "=== Проверка после настройки PROMPT_COMMAND ==="
+=== Проверка после настройки PROMPT_COMMAND ===
+whoami_part2$ echo "Кэш истории:"
+Кэш истории:
+whoami_part2$ history | tail -3
+  256  16.10.2025 15:25:10 echo "=== Проверка после настройки PROMPT_COMMAND ==="
+  257  16.10.2025 15:25:10 echo "Кэш истории:"
+  258  16.10.2025 15:25:11 history | tail -3
+whoami_part2$ echo "Файл истории:"
+Файл истории:
+whoami_part2$ tail -3 ~/.bash_history
+history | tail -3
+#1760603116
+echo "Файл истории:"
+whoami_part2$ DATE=$(date +%d.%m.%Y)
+whoami_part2$ echo "DATE=$DATE"
+DATE=16.10.2025
+whoami_part2$ TIME=$(date +%H:%M:%S)
+whoami_part2$ echo "TIME=$TIME"
+TIME=15:25:45
+whoami_part2$ DATE_TIME="$DATE $TIME"
+whoami_part2$ echo "DATE_TIME=$DATE_TIME"
+DATE_TIME=16.10.2025 15:25:45
+whoami_part2$ echo "=== Файлы с цифрами в /bin и /sbin ==="
+=== Файлы с цифрами в /bin и /sbin ===
+whoami_part2$ find /bin /sbin -maxdepth 1 -name '*[0-9]*' 2>/dev/null | head -10
+whoami_part2$ echo "=== Изменение приглашения ==="
+=== Изменение приглашения ===
+whoami_part2$ PS1='\u@\h-$(date +%H:%M)> '
+manbayev@Manbayev-15:26> echo "Приглашение изменено"
+Приглашение изменено
+manbayev@Manbayev-15:26> echo "=== Создание каталогов для месяцев года ==="
+=== Создание каталогов для месяцев года ===
+manbayev@Manbayev-15:26> for month in {01..12}; do mkdir -p ~/$(date +%Y)-$month; done
+manbayev@Manbayev-15:26> ls -la ~/ | grep $(date +%Y)
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-01
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-02
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-03
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-04
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-05
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-06
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-07
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-08
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-09
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-10
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-11
+drwxrwxr-x  2 manbayev manbayev  4096 окт 16 15:04 2025-12
+manbayev@Manbayev-15:26> echo "=== Завершение сессии whoami_part2 ==="
+=== Завершение сессии whoami_part2 ===
+manbayev@Manbayev-15:26> exit
+exit
